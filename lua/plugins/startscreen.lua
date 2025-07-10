@@ -2,21 +2,56 @@ return {
   {
     'glepnir/dashboard-nvim',
     event = 'VimEnter',
+    dependencies = { 'nvim-tree/nvim-web-devicons' },
     config = function()
       require('dashboard').setup({
-        theme = 'hyper',
+        theme = 'doom',
         config = {
-          week_header = {
-            enable = true,
+          header = {
+            '',
+            ' ███╗   ██╗ ███████╗ ██████╗  ██╗   ██╗ ██╗ ███╗   ███╗',
+            ' ████╗  ██║ ██╔════╝██╔═══██╗ ██║   ██║ ██║ ████╗ ████║',
+            ' ██╔██╗ ██║ █████╗  ██║   ██║ ██║   ██║ ██║ ██╔████╔██║',
+            ' ██║╚██╗██║ ██╔══╝  ██║   ██║ ╚██╗ ██╔╝ ██║ ██║╚██╔╝██║',
+            ' ██║ ╚████║ ███████╗╚██████╔╝  ╚████╔╝  ██║ ██║ ╚═╝ ██║',
+            ' ╚═╝  ╚═══╝ ╚══════╝ ╚═════╝    ╚═══╝   ╚═╝ ╚═╝     ╚═╝',
+            '',
           },
-          shortcut = {
-            { desc = '󰊳 Update', group = '@property', action = 'Lazy update', key = 'u' },
-            { desc = ' Files', group = 'Label', action = 'Telescope find_files', key = 'f' },
-            { desc = ' dotfiles', group = 'Number', action = 'Telescope find_files cwd=~/.config/nvim', key = 'd' },
+          center = {
+            {
+              icon = ' ',
+              desc = 'Edit config',
+              action = 'edit ~/.config/nvim/init.lua',
+              key = 'c'
+            },
+            {
+              icon = '󰒲 ',
+              desc = 'Lazy plugins',
+              action = 'Lazy',
+              key = 'p'
+            },
+            {
+              icon = '󰊳 ',
+              desc = 'Update plugins',
+              action = 'Lazy update',
+              key = 'u'
+            },
+            {
+              icon = ' ',
+              desc = 'Find files',
+              action = 'Telescope find_files',
+              key = 'f'
+            },
+            {
+              icon = '󰈚 ',
+              desc = 'Recent files',
+              action = 'Telescope oldfiles',
+              key = 'r'
+            },
           },
-        },
+          footer = { '' } -- Empty footer
+        }
       })
-    end,
-    dependencies = { {'nvim-tree/nvim-web-devicons'}}
+    end
   }
 }

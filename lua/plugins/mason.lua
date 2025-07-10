@@ -11,9 +11,9 @@ return {
     ensure_installed = {
       -- LSP
       "pyright",          -- Python
-      "tsserver",         -- TypeScript/JavaScript
       "jdtls",            -- Java
       "rust_analyzer",    -- Rust
+      "typescript-language-server",         -- TypeScript/JavaScript
       "lua_ls",           -- Lua
       "bashls",           -- Bash
       
