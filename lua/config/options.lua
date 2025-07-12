@@ -12,6 +12,9 @@ vim.opt.tabstop = 2      -- Width of tab character
 vim.opt.shiftwidth = 2   -- Spaces for auto-indent
 vim.opt.softtabstop = 2  -- Spaces inserted when pressing Tab
 vim.opt.expandtab = true -- Convert tabs to spaces
+-- dashboardsettings
+vim.g.dashboard_center_padding = 0
+vim.g.dashboard_center_spacing = 2
 
 -- GUI-specific overrides
 if vim.g.neovide then
