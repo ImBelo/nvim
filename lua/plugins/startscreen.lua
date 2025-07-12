@@ -22,49 +22,50 @@ return {
           center = {
             {
               icon = ' ',
+              icon_hl = 'group',
               desc = 'Edit config',
               action = 'edit ~/.config/nvim/lua/plugins',
               key = 'c'
             },
             {
               icon = ' ',
-              desc = 'Scala',
+              desc = 'Scala         ',
               action = 'edit ~/scala',
               key = 's'
             },
             {
               icon = ' ',
-              desc = 'Java',
+              desc = 'Java          ',
               action = 'edit ~/java',
               key = 'j'
             },
             {
               icon = ' ',
-              desc = 'node',
+              desc = 'node          ',
               action = 'edit ~/node',
               key = 'n'
             },
             {
-              icon = '',
-              desc = 'Python',
+              icon = ' ',
+              desc = 'Python        ',
               action = 'edit ~/python',
               key = 'p'
             },
             {
-              icon = '󱘗',
-              desc = 'Rust',
+              icon = '󱘗 ',
+              desc = 'Rust         ',
               action = 'edit ~/rust',
               key = 'r'
             },
             {
               icon = ' ',
-              desc = 'C',
+              desc = 'C         ',
               action = 'edit ~/c',
               key = 'C'
             },
             {
               icon = ' ',
-              desc = 'C++',
+              desc = 'C++         ',
               action = 'edit ~/cpp',
               key = 'V'
             },
@@ -93,14 +94,12 @@ return {
               key = 'R'
             },
           },
-          footer = {
-            '',
-            '  ✧･ﾟ: *✧･ﾟ:* *:･ﾟ✧*:･ﾟ✧･ﾟ: *✧･ﾟ:* *:･ﾟ✧*:･ﾟ✧',
-            '    ✦   Your Cosmic Code Editor   ✦',
-            '  ✧･ﾟ: *✧･ﾟ:* *:･ﾟ✧*:･ﾟ✧･ﾟ: *✧･ﾟ:* *:･ﾟ✧*:･ﾟ✧',
-            ''
-          }
-        }
+             footer = function()
+          local stats = require("lazy").stats()
+          local ms = (math.floor(stats.startuptime * 100 + 0.5) / 100)
+          return { "⚡ Neovim loaded " .. stats.loaded .. "/" .. stats.count .. " plugins in " .. ms .. "ms" }
+        end,
+       }
       })
     end
   }
