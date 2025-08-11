@@ -1,77 +1,90 @@
--- LSP Support
 return {
-  -- LSP Configuration
-  -- https://github.com/neovim/nvim-lspconfig
   'neovim/nvim-lspconfig',
   event = 'VeryLazy',
   dependencies = {
-    -- LSP Management
-    -- https://github.com/williamboman/mason.nvim
-    { 'williamboman/mason.nvim' },
-    -- https://github.com/williamboman/mason-lspconfig.nvim
-    { 'williamboman/mason-lspconfig.nvim' },
-
-    -- Useful status updates for LSP
-    -- https://github.com/j-hui/fidget.nvim
-    { 'j-hui/fidget.nvim', opts = {} },
-
-    -- Additional lua configuration, makes nvim stuff amazing!
-    -- https://github.com/folke/neodev.nvim
-    { 'folke/neodev.nvim', opts = {} },
+    {'hrsh7th/cmp-nvim-lsp'},
+    {'williamboman/mason.nvim'},
+    {'williamboman/mason-lspconfig.nvim'},
+    {'WhoIsSethDaniel/mason-tool-installer.nvim'},
+    {'j-hui/fidget.nvim', opts = {}},
+    {'folke/lazydev.nvim', opts = {}},
   },
-  config = function ()
+  config = function()
+    -- Setup Mason first
     require('mason').setup()
+
+    -- Configure Mason LSP installer
     require('mason-lspconfig').setup({
-      -- Install these LSPs automatically
       ensure_installed = {
-        -- 'bashls', -- requires npm to be installed
-        -- 'cssls', -- requires npm to be installed
-        -- 'html', -- requires npm to be installed
-        'lua_ls',
-        -- 'jsonls', -- requires npm to be installed
-        'lemminx',
-        'marksman',
-        'quick_lint_js',
-        -- 'tsserver', -- requires npm to be installed
-        -- 'yamlls', -- requires npm to be installed
-      }
+        "pyright"
+      },
+      automatic_installation = true, -- Auto-install missing servers
     })
 
-    local lspconfig = require('lspconfig')
-    local lsp_capabilities = require('cmp_nvim_lsp').default_capabilities()
-    local lsp_attach = function(client, bufnr)
-      -- Create your keybindings here...
+    -- Configure tools installer (linters/formatters)
+    require('mason-tool-installer').setup({
+      ensure_installed = {
+        'java-debug-adapter',
+        'java-test',
+      },
+    })
+
+    -- Setup LSP capabilities
+    local capabilities = require('cmp_nvim_lsp').default_capabilities()
+    
+    -- Common on_attach function
+    local on_attach = function(client, bufnr)
+      local opts = { buffer = bufnr }
+      vim.keymap.set('n', 'gd', vim.lsp.buf.definition, opts)
+      vim.keymap.set('n', 'K', vim.lsp.buf.hover, opts)
+      vim.keymap.set('n', '<leader>rn', vim.lsp.buf.rename, opts)
+      vim.keymap.set('n', '<leader>ca', vim.lsp.buf.code_action, opts)
     end
 
-    -- Call setup on each LSP server
-    require('mason-lspconfig').setup_handlers({
-      function(server_name)
-        lspconfig[server_name].setup({
-          on_attach = lsp_attach,
-          capabilities = lsp_capabilities,
-        })
-      end
-    })
-
-    -- Lua LSP settings
-    lspconfig.lua_ls.setup {
+    vim.lsp.config('lua_ls', {
       settings = {
+        capabilities = capabilities,
+        on_attach = on_attach,
         Lua = {
+          runtime = {
+            version = 'LuaJIT',
+          },
           diagnostics = {
-            -- Get the language server to recognize the `vim` global
-            globals = {'vim'},
+            globals = {
+              'vim',
+              'require',
+            },
           },
         },
       },
-    }
+    })
+    vim.lsp.config('pyright', {
+      settings = {
+        capabilities = capabilities,
+        on_attach = on_attach,
+        settings= {
+          python = {
+            analysis = {
+              typeCheckingMode = "basic",  -- "off", "basic", "strict"
+              autoSearchPaths = true,
+              diagnosticMode = "workspace", -- "openFilesOnly" or "workspace"
+              useLibraryCodeForTypes = true,
+            }
+          }
+        }
+      }
 
-    -- Globally configure all LSP floating preview popups (like hover, signature help, etc)
-    local open_floating_preview = vim.lsp.util.open_floating_preview
-    function vim.lsp.util.open_floating_preview(contents, syntax, opts, ...)
-      opts = opts or {}
-      opts.border = opts.border or "rounded" -- Set border to rounded
-      return open_floating_preview(contents, syntax, opts, ...)
-    end
 
+
+    })
+
+
+    -- Optional: Auto-install tools on startup
+    vim.api.nvim_create_autocmd('User', {
+      pattern = 'VeryLazy',
+      callback = function()
+        vim.cmd('MasonToolsInstall')
+      end
+    })
   end
 }

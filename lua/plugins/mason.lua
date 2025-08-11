@@ -1,5 +1,4 @@
 return {
-  
   "williamboman/mason.nvim",
   dependencies = {
     -- Add this line to include mason-tool-installer
@@ -15,13 +14,10 @@ return {
       "rust_analyzer",    -- Rust
       "typescript-language-server",         -- TypeScript/JavaScript
       "lua_ls",           -- Lua
-      "bashls",           -- Bash
-      
       -- Formatters
       "black",            -- Python
       "prettier",         -- JS/TS
       "stylua",           -- Lua
-      
       -- Linters
       "eslint_d",         -- JavaScript
       "flake8",           -- Python

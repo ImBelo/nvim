@@ -1,5 +1,6 @@
 -- Auto-completion / Snippets
-return {
+return { 
+  {
   -- https://github.com/hrsh7th/nvim-cmp
   'hrsh7th/nvim-cmp',
   event = 'InsertEnter',
@@ -71,10 +72,10 @@ return {
         end, { 'i', 's' }),
       },
       sources = cmp.config.sources({
-        { name = "nvim_lsp" }, -- lsp 
-        { name = "luasnip" }, -- snippets
-        { name = "buffer" }, -- text within current buffer
-        { name = "path" }, -- file system paths
+        { name = "nvim_lsp" ,priority = 100}, -- lsp 
+        { name = "luasnip" ,priority = 50}, -- snippets
+        { name = "buffer",priority = 10 }, -- text within current buffer
+        { name = "path" ,priority = 70}, -- file system paths
       }),
       window = {
         -- Add borders to completions popups
@@ -83,4 +84,9 @@ return {
       },
     })
   end,
- }
+ },
+  {
+  "scalameta/nvim-metals",  -- Metals LSP
+  dependencies = { "hrsh7th/nvim-cmp" },
+  }
+}
