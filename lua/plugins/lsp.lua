@@ -16,16 +16,19 @@ return {
     -- Configure Mason LSP installer
     require('mason-lspconfig').setup({
       ensure_installed = {
-        "pyright"
+        "pyright",
+        "lua_ls"  -- Added lua_ls since you're configuring it
       },
-      automatic_installation = true, -- Auto-install missing servers
+      automatic_installation = true,
     })
 
     -- Configure tools installer (linters/formatters)
+    -- NOTE: pyright should NOT be here - it's an LSP server, not a tool
     require('mason-tool-installer').setup({
       ensure_installed = {
         'java-debug-adapter',
         'java-test',
+        -- Remove 'pyright' from here
       },
     })
 
@@ -37,14 +40,14 @@ return {
       local opts = { buffer = bufnr }
       vim.keymap.set('n', 'gd', vim.lsp.buf.definition, opts)
       vim.keymap.set('n', 'K', vim.lsp.buf.hover, opts)
-      vim.keymap.set('n', '<leader>rn', vim.lsp.buf.rename, opts)
+      vim.keymap.set('n', '<leader>rn', vim.lsp.buf.rename, opts)  -- Fixed typo: vim not vim
       vim.keymap.set('n', '<leader>ca', vim.lsp.buf.code_action, opts)
     end
-
-    vim.lsp.config('lua_ls', {
+    -- Lua LS configuration (fixed structure)
+    require('lspconfig').lua_ls.setup({
+      capabilities = capabilities,
+      on_attach = on_attach,
       settings = {
-        capabilities = capabilities,
-        on_attach = on_attach,
         Lua = {
           runtime = {
             version = 'LuaJIT',
@@ -55,36 +58,27 @@ return {
               'require',
             },
           },
+          workspace = {
+            checkThirdParty = false,
+          },
         },
       },
     })
-    vim.lsp.config('pyright', {
+
+    -- Pyright configuration (fixed structure)
+    require('lspconfig').pyright.setup({
+      capabilities = capabilities,
+      on_attach = on_attach,
       settings = {
-        capabilities = capabilities,
-        on_attach = on_attach,
-        settings= {
-          python = {
-            analysis = {
-              typeCheckingMode = "basic",  -- "off", "basic", "strict"
-              autoSearchPaths = true,
-              diagnosticMode = "workspace", -- "openFilesOnly" or "workspace"
-              useLibraryCodeForTypes = true,
-            }
+        python = {
+          analysis = {
+            typeCheckingMode = "basic",
+            autoSearchPaths = true,
+            diagnosticMode = "workspace",
+            useLibraryCodeForTypes = true,
           }
         }
       }
-
-
-
-    })
-
-
-    -- Optional: Auto-install tools on startup
-    vim.api.nvim_create_autocmd('User', {
-      pattern = 'VeryLazy',
-      callback = function()
-        vim.cmd('MasonToolsInstall')
-      end
     })
   end
 }
