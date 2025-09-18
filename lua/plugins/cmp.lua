@@ -31,7 +31,7 @@ return {
     require('luasnip.loaders.from_vscode').lazy_load()
     luasnip.config.setup({})
 
-    cmp.setup({
+   cmp.setup({
       snippet = {
         expand = function(args)
           luasnip.lsp_expand(args.body)
@@ -72,6 +72,7 @@ return {
         end, { 'i', 's' }),
       },
       sources = cmp.config.sources({
+        {name = 'vimtex' },
         { name = "nvim_lsp" ,priority = 100}, -- lsp 
         { name = "luasnip" ,priority = 50}, -- snippets
         { name = "buffer",priority = 10 }, -- text within current buffer
@@ -80,7 +81,6 @@ return {
       window = {
         -- Add borders to completions popups
         completion = cmp.config.window.bordered(),
-        documentation = cmp.config.window.bordered(),
       },
     })
   end,

@@ -8,48 +8,21 @@ vim.keymap.set('i', 'jk', '<ESC>', {
   expr = false,
   nowait = true
 })
--- Toggle current fold with <Tab>
--- Only set the mapping AFTER ufo loads
-vim.api.nvim_create_autocmd('User', {
-  pattern = 'UfoAttached',  -- Or your plugin manager's loaded event
-  callback = function()
-    vim.keymap.set('n', '<Tab>', function()
-      local winid = require('ufo').peekFoldedLinesUnderCursor()
-      if not winid then
-        vim.cmd('normal! za')
-      end
-    end, { desc = 'Toggle fold' })
-  end
-})
 
--- Toggle all folds with <S-Tab>
-vim.keymap.set('n', '<S-Tab>', function()
-  if require('ufo').getFoldedFolds() > 0 then
-    require('ufo').openAllFolds()
-  else
-    require('ufo').closeAllFolds()
-  end
-end, { desc = 'Toggle all folds' })
-vim.opt.timeoutlen = 200
-map('n', 'zR', function()
-  require('ufo').openAllFolds()
-end, { desc = 'Open all folds' })
+vim.keymap.set("x", "<leader>p", [["_dP]])
 
-map('n', 'zM', function()
-  require('ufo').closeAllFolds()
-end, { desc = 'Close all folds' })
+-- next greatest remap ever : asbjornHaland
+vim.keymap.set({"n", "v"}, "<leader>y", [["+y]])
+vim.keymap.set("n", "<leader>Y", [["+Y]])
 
-map('n', 'zr', function()
-  require('ufo').openFoldsExceptKinds()
-end, { desc = 'Fold less (open more)' })
+vim.keymap.set({"n", "v"}, "<leader>d", [["_d]])
+vim.keymap.set("n", "<C-k>", "<cmd>cnext<CR>zz")
+vim.keymap.set("n", "<C-j>", "<cmd>cprev<CR>zz")
+vim.keymap.set("n", "<leader>k", "<cmd>lnext<CR>zz")
+vim.keymap.set("n", "<leader>j", "<cmd>lprev<CR>zz")
+vim.keymap.set("n", "<C-d>", "5jzz")
+vim.keymap.set("n", "<C-u>", "5kzz")
 
-map('n', 'zm', function()
-  require('ufo').closeFoldsWith()
-end, { desc = 'Fold more (close more)' })
-
-map('n', 'zp', function()
-  require('ufo').peekFoldedLinesUnderCursor()
-end, { desc = 'Peek fold content' })
 -- File Explorer
 map("n", "<leader>e", ":NvimTreeToggle<CR>", { silent = true })
 
@@ -73,4 +46,21 @@ map('n', '<leader>gl', '<cmd>lua vim.diagnostic.open_float()<CR>')
 map('n', '<leader>gp', '<cmd>lua vim.diagnostic.goto_prev()<CR>')
 map('n', '<leader>gn', '<cmd>lua vim.diagnostic.goto_next()<CR>')
 map('n', '<leader>tr', '<cmd>lua vim.lsp.buf.document_symbol()<CR>')
-map('i', '<C-Space>', '<cmd>lua vim.lsp.buf.completion()<CR>')
+map('n', '<leader>gc', ':terminal latexmk -pdf -interaction=nonstopmode %<CR>')
+-- VimTeX Keymaps
+-- Compilation
+vim.keymap.set('n', '<leader>lc', '<cmd>VimtexCompile<cr>', { desc = '[C]ompile (once)' })
+vim.keymap.set('n', '<leader>lC', '<cmd>VimtexClean<cr>', { desc = '[C]lean build files' })
+vim.keymap.set('n', '<leader>ll', '<cmd>VimtexCompileToggle<cr>', { desc = 'Compile [L]oop Toggle (continuous)' })
+vim.keymap.set('n', '<leader>lo', '<cmd>VimtexCompileOutput<cr>', { desc = 'Show Compiler [O]utput' })
+
+-- Viewing
+vim.keymap.set('n', '<leader>lv', '<cmd>VimtexView<cr>', { desc = '[V]iew PDF' })
+vim.keymap.set('n', '<leader>ls', '<cmd>VimtexForwardSearch<cr>', { desc = 'Forward [S]earch' })
+
+-- Information
+vim.keymap.set('n', '<leader>li', '<cmd>VimtexInfo<cr>', { desc = '[I]nfo' })
+vim.keymap.set('n', '<leader>lI', '<cmd>VimtexInfoAll<cr>', { desc = '[I]nfo (all)' })
+vim.keymap.set('n', '<leader>lt', '<cmd>VimtexTocToggle<cr>', { desc = '[T]able of Contents' })
+vim.keymap.set('n', '<leader>lT', '<cmd>VimtexTocOpen<cr>', { desc = '[T]able of Contents (open)' })
+

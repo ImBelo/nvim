@@ -64,10 +64,10 @@ return {
               key = 'C'
             },
             {
-              icon = ' ',
-              desc = 'C++         ',
-              action = 'edit ~/cpp',
-              key = 'V'
+              icon = 'markdown ',
+              desc = 'md         ',
+              action = 'edit ~/BancaEuropea/',
+              key = 'm'
             },
             {
               icon = '󰒲 ',

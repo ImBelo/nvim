@@ -15,7 +15,6 @@ vim.opt.expandtab = true -- Convert tabs to spaces
 -- dashboardsettings
 vim.g.dashboard_center_padding = 0
 vim.g.dashboard_center_spacing = 2
-
 -- GUI-specific overrides
 if vim.g.neovide then
   vim.g.neovide_font_size = 12

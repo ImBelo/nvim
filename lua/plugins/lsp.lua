@@ -65,6 +65,33 @@ return {
       },
     })
 
+    require('lspconfig').rust_analyzer.setup({
+      capabilities = capabilities,
+      on_attach = on_attach,
+      settings = {
+        ["rust-analyzer"] = {
+          check = {
+            command = "clippy", -- Use clippy for checkOnSave
+          },
+          analysis = {
+            typeCheckingMode = "basic",
+            autoSearchPaths = true,
+            diagnosticMode = "workspace",
+            useLibraryCodeForTypes = true,
+          },
+          procMacro = {
+            ignored = {
+              leptos_macro = {
+                -- optional: --
+                -- "component",
+                "server",
+              },
+            },
+          }
+        }
+      }
+    }
+    )
     -- Pyright configuration (fixed structure)
     require('lspconfig').pyright.setup({
       capabilities = capabilities,
